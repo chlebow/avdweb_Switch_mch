@@ -10,8 +10,11 @@ AUTHOR: Albert van Dalen
 WEBSITE: http://www.avdweb.nl/arduino/hardware-interfacing/simple-switch-debouncer.html
 */
 
-#ifndef AVDWEB_SWITCH_H
-#define AVDWEB_SWITCH_H
+
+#ifndef MCH_SWITCH_H
+#define MCH_SWITCH_H
+
+
 
 typedef void (*switchCallback_t)(void*); 
 
@@ -27,6 +30,7 @@ public:
   bool longPress(); // will be refreshed by poll()
   bool doubleClick(); // will be refreshed by poll()
   bool singleClick(); // will be refreshed by poll()
+  bool process(uint8_t state); // not inline, used in child class, moved from protected
 
   // Set methods for event callbacks
   void setPushedCallback(switchCallback_t cb, void* param = nullptr);
@@ -39,7 +43,7 @@ public:
   unsigned long deglitchPeriod, debouncePeriod, longPressPeriod, doubleClickPeriod;
 
   protected:
-  bool process(); // not inline, used in child class
+  //bool process(); // not inline, used in child class - moved to public
   void inline deglitch();
   void inline debounce();
   void inline calcLongPress();
@@ -51,6 +55,7 @@ public:
   const byte pin;
   const bool polarity;
   bool input, lastInput, equal, deglitched, debounced, _switched, _longPress, longPressDisable, _doubleClick, _singleClick, singleClickDisable;
+
 
   // Event callbacks
   switchCallback_t _pushedCallback = nullptr;
