@@ -25,6 +25,7 @@ setReleasedCallback	KEYWORD2
 setLongPressCallback	KEYWORD2
 setDoubleClickCallback	KEYWORD2
 setSingleClickCallback	KEYWORD2
+process 	KEYWORD2
 
 #######################################
 # Instances (KEYWORD2)

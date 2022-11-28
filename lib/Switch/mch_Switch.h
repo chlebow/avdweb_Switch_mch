@@ -11,8 +11,8 @@ WEBSITE: http://www.avdweb.nl/arduino/hardware-interfacing/simple-switch-debounc
 */
 
 
-#ifndef MCHWEB_SWITCH_H
-#define MCHWEB_SWITCH_H
+#ifndef MCH_SWITCH_H
+#define MCH_SWITCH_H
 
 
 
@@ -30,7 +30,7 @@ public:
   bool longPress(); // will be refreshed by poll()
   bool doubleClick(); // will be refreshed by poll()
   bool singleClick(); // will be refreshed by poll()
-  bool process(uint8_t state); // not inline, used in child class
+  bool process(uint8_t state); // not inline, used in child class, moved from protected
 
   // Set methods for event callbacks
   void setPushedCallback(switchCallback_t cb, void* param = nullptr);
@@ -43,7 +43,7 @@ public:
   unsigned long deglitchPeriod, debouncePeriod, longPressPeriod, doubleClickPeriod;
 
   protected:
-  //bool process(); // not inline, used in child class - przenioslem do public
+  //bool process(); // not inline, used in child class - moved to public
   void inline deglitch();
   void inline debounce();
   void inline calcLongPress();
@@ -56,10 +56,6 @@ public:
   const bool polarity;
   bool input, lastInput, equal, deglitched, debounced, _switched, _longPress, longPressDisable, _doubleClick, _singleClick, singleClickDisable;
 
-
-private:
-//  uint8_t _dataIn;
-//TwoWire*  _wire;
 
   // Event callbacks
   switchCallback_t _pushedCallback = nullptr;
@@ -79,66 +75,4 @@ private:
   static void* _beepAllCallbackParam; // can be used by all objects
   //static void* _beepAllCallbackParam = nullptr; // gives error with SAMD21
 };
-
-
-
-/*
-class PCF857
-{
-public:
-  explicit PCF857(const uint8_t deviceAddress = 0x20, TwoWire *wire = &Wire);
-
-#if defined (ESP8266) || defined(ESP32)
-  bool    begin(uint8_t sda, uint8_t scl, uint8_t value = PCF857_INITIAL_VALUE);
-#endif
-  bool    begin(uint8_t value = PCF857_INITIAL_VALUE);
-  bool    isConnected();
-
-
-  // note: setting the address corrupt internal buffer values
-  // a read8() / write8() call updates them.
-  bool    setAddress(const uint8_t deviceAddress);
-  uint8_t getAddress();  
-
-
-  uint8_t read8();
-  uint8_t read(const uint8_t pin);
-  uint8_t value() const { return _dataIn; };
-
-
-  void    write8(const uint8_t value);
-  void    write(const uint8_t pin, const uint8_t value);
-  uint8_t valueOut() const { return _dataOut; }
-
-
-  //added 0.1.07/08 Septillion
-  inline uint8_t readButton8()  { return PCF857::readButton8(_buttonMask); }
-  uint8_t        readButton8(const uint8_t mask);
-  uint8_t        readButton(const uint8_t pin);
-  inline void    setButtonMask(const uint8_t mask) { _buttonMask = mask; };
-  uint8_t        getButtonMask() { return _buttonMask; };
-
-
-  // rotate, shift, toggle, reverse expect all lines are output
-  void    toggle(const uint8_t pin);
-  void    toggleMask(const uint8_t mask = 0xFF);    // default 0xFF ==> invertAll()
-  void    shiftRight(const uint8_t n = 1);
-  void    shiftLeft(const uint8_t n = 1);
-  void    rotateRight(const uint8_t n = 1);
-  void    rotateLeft(const uint8_t n = 1);
-  void    reverse();
-
-
-  int     lastError();
-
-
-private:
-  uint8_t _address;
-  uint8_t _dataIn;
-  uint8_t _dataOut;
-  uint8_t _buttonMask;
-  int     _error;
-
-  TwoWire*  _wire;
-};*/
 #endif

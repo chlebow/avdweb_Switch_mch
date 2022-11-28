@@ -1,14 +1,12 @@
 #include <Arduino.h>
-//#include <Wire.h>
 
-#include "mchweb_Switch.h"
+#include "mch_Switch.h"
 #include "PCF8574.h"
 
+#define addres 0x20
 
 
-const byte addres = 0x20;
-PCF8574 pcf20(addres);
-PCF8574 pcf201(addres);
+PCF8574 pcf(addres);
 
 
 const byte buttonPCFpin = 4; 
@@ -23,22 +21,13 @@ Switch ButtonESP2866 = Switch(ButtonESP2866pin,  INPUT_PULLUP, LOW, 1); // butto
 void setup() 
 {
   Serial.begin(9600);
-  pcf20.begin();
-  pcf201.begin();  
+  pcf.begin();
 }
  
 void loop() 
-{  
+{
 
-/*
-if(pcf20.read(4) == 0){
-  //buttonGND.process();
-  Serial.print("process ");
-}*/
-
-buttonPCF.process(pcf20.read(4));
-
-//buttonGND.poll();
+  buttonPCF.process(pcf.read(4));   //for external switch conect to expander, like PCF8574
   if(buttonPCF.switched()) Serial.print("buttonPCF switched ");
   if(buttonPCF.pushed()) {Serial.print("buttonPCF pushed "); Serial.print(++i); Serial.println(" times");}
   if(buttonPCF.released()) Serial.println("buttonPCF released");
